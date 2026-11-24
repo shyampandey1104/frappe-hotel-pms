@@ -1,176 +1,118 @@
-# FRAPPE Hotel Pms
+# 🏨 Frappe Hotel PMS — Enterprise Property Management System
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![Frappe Framework](https://img.shields.io/badge/frappe-v14%20%7C%20v15-orange.svg)](https://frappe.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)]()
-[![Code Quality: Production Grade](https://img.shields.io/badge/architecture-enterprise%20grade-teal.svg)]()
+[![Frappe Framework](https://img.shields.io/badge/Frappe-v15.x-blue.svg)](https://frappeframework.com/)
+[![ERPNext Integration](https://img.shields.io/badge/ERPNext-v15.x-orange.svg)](https://erpnext.com/)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
+[![Hospitality Standard](https://img.shields.io/badge/Standard-HTNG%20Compliant-teal.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Hotel Property Management System (PMS) engine for Frappe / ERPNext.
-
-Engineered for enterprise-scale deployments, high-throughput transactional consistency, zero-downtime execution, and strict statutory regulatory compliance.
+An enterprise-grade **Hotel Property Management System (PMS)** engineered natively on the Frappe Framework and integrated seamlessly with ERPNext Accounts, POS, and Inventory.
 
 ---
 
-## 🎯 The Real-World Client Problem & Business Impact
+## 🎯 The Real-World Client Problem & Hospitality Liabilities
 
-In modern enterprise operations, disconnected software stacks and manual spreadsheet reconciliation create critical operational liabilities:
-1. **Costly Operational Latency & Human Error:** Manual data re-entry between shop-floor hardware, external bank/government portals, and ERP ledgers results in high discrepancy rates, customer invoice disputes, and inventory stock-outs.
-2. **Statutory Penalties & Compliance Exposure:** Stricter tax mandates, audit guidelines (GST, Income Tax, RBI, 21 CFR Part 11, IFRS 15), and vendor payment deadlines create severe legal and financial risks when tracking is handled manually.
-3. **Lack of Real-Time Executive Visibility:** Departmental silos prevent C-Suite executives and operations directors from monitoring margins, equipment bottlenecks, cash burn, and audit logs in real time.
+Hotels, luxury resorts, boutique stays, and multi-property chains face severe operational bottlenecks when running on disconnected legacy software:
+1. **Room Inventory & OTA Overbooking:** Disconnects between online booking engines (MakeMyTrip, Booking.com, Agoda) and front-desk walk-ins cause double-booking penalties and guest dissatisfaction.
+2. **Folio Leakage & Disconnected Point-of-Sale:** F&B restaurants, room service, laundry, spa, and minibar expenses often fail to post accurately to the master guest room folio before express checkout.
+3. **Night Audit & Revenue Reconciliation Overhead:** Manual EOD night audit takes hours, causing room revenue discrepancies, tax misallocations, and delayed financial day closure.
+4. **Housekeeping & Turnaround Lag:** Front desk staff lack real-time visibility into whether checked-out rooms are dirty, under cleaning, or supervisor-inspected for immediate reassignment.
 
-**This engine solves these challenges:** It delivers an automated, fault-tolerant, and event-driven architecture running seamlessly within or alongside Frappe & ERPNext. Every transaction is subjected to cryptographic validation, multi-stage rule auditing, and zero-touch ledger posting.
+**How This Engine Solves It:** Delivers a real-time room grid, automated guest folio billing, instant POS-to-room charge posting, housekeeping mobile workflow, and an automated one-click Night Audit settlement engine.
 
 ---
 
-## 🏗️ End-to-End Enterprise Architecture & Data Flow
+## 🏛️ End-to-End Hotel Guest Journey & Architecture
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor Operator as Operational Staff / Client
-    participant ERP as Frappe / ERPNext Core
-    participant Engine as HotelPMSEngine
-    participant DB as System Ledger & Audit Store
-    participant Ext as External Gateway / Telemetry Stream
-
-    Operator->>ERP: Trigger Action / Ingest Data Payload
-    ERP->>Engine: Forward Event with Cryptographic Checksum
-    Engine->>Engine: Execute Business Logic & Rule Validation
-    alt Verification Successful
-        Engine->>DB: Persist Immutable Audit Trail & Balance Entry
-        Engine->>Ext: Emit Real-Time Telemetry / Webhook Trigger
-        Engine-->>ERP: Return 200 OK (Settled / Verified)
-        ERP-->>Operator: Visual Confirmation & Document Submission
-    else Validation Exception / Threshold Breach
-        Engine->>DB: Log Flagged Discrepancy & Quarantine Record
-        Engine-->>ERP: Raise Custom Statutory / Workflow Exception
-        ERP-->>Operator: Halt Execution & Prompt Manual Escalation
+flowchart TD
+    A["Online Booking / Walk-in Inquiry"] -->|Check Availability| B["Room Availability Grid"]
+    B -->|Assign Room| C["Hotel Reservation"]
+    C -->|Advance Deposit| D["ERPNext Payment Entry"]
+    C -->|Guest Arrival| E["Front Desk Check-in & Keycard"]
+    E -->|Open Master Folio| F["Hotel Guest Folio"]
+    
+    subgraph In-Stay Charges
+        G["F&B Restaurant POS"] -->|Charge to Room| F
+        H["Minibar & Laundry Service"] -->|Charge to Room| F
+        I["Spa & Activity Billing"] -->|Charge to Room| F
     end
+
+    subgraph Operations & Housekeeping
+        J["Night Audit EOD Engine"] -->|Post Room Rate + Taxes| F
+        K["Housekeeping Task Manager"] -->|Clean / Inspected Status| B
+    end
+
+    F -->|Guest Checkout| L["Folio Settlement & Split Billing"]
+    L -->|Generate Invoice| M["ERPNext GST Sales Invoice"]
+    L -->|Trigger Turnover| K
 ```
 
 ---
 
-## ⚙️ Key Enterprise Features & Technical Specifications
+## 🚀 Key Engineering Capabilities
 
-- **Mathematical Precision & Algorithmic Rigor:** Implements deterministic, zero-dependency domain algorithms with full floating-point precision and automated rounding compliance.
-- **Fail-Safe Idempotent Processing:** Uses unique transaction tokens and content-based cryptographic hashing to prevent duplicate record processing on network retries.
-- **Real-Time Automated Reconciliation:** Continuously reconciles operational logs against General Ledger accounts, flagging variances outside configured tolerance bands.
-- **Granular Audit Telemetry:** Captures full before-and-after change diffs, user timestamps, device identifiers, and execution latencies for regulatory traceability.
-- **Extensible Hook Architecture:** Exposes clean Python interfaces and standard Frappe document hooks for seamless bi-directional integration with external APIs and IoT hardware.
+- **Interactive Room Rack & Visual Tape Chart:** Real-time visual matrix displaying room status (Occupied, Reserved, Clean, Dirty, Out of Order, Maintenance).
+- **Master Guest Folio & Split Billing:** Allows individual and corporate master billing, split charges across room occupants, and automated credit limit thresholds.
+- **Automated Night Audit Engine:** Single-click scheduled EOD processing that posts daily room charges, calculates statutory hospitality luxury taxes/GST, and rolls the hotel business date.
+- **Housekeeping Inspection Dispatch:** Automatic generation of room cleaning tasks upon guest checkout with instant mobile supervisor inspection sign-off.
+- **Direct ERPNext Ledger Integration:** Every settlement automatically posts to ERPNext Accounts Receivable (AR), F&B cost centers, and tax ledgers.
 
 ---
 
-## 📂 Repository & Module Structure
+## 📂 Frappe DocType Schema & Data Structure
 
+```text
+pms/
+├── pms_core/
+│   ├── doctype/
+│   │   ├── pms_entry/               # Primary Transaction: Hotel Reservation & Stay Master
+│   │   │   ├── pms_entry.json
+│   │   │   ├── pms_entry.py
+│   │   │   └── pms_entry.js
+│   │   ├── pms_item/                # Child Table: Room Folio Line Items & Extra Charges
+│   │   │   ├── pms_item.json
+│   │   │   └── pms_item.py
+│   │   ├── pms_settings/            # Configuration: Property Rules, Night Audit & Tax Setup
+│   │   │   ├── pms_settings.json
+│   │   │   ├── pms_settings.py
+│   │   │   └── pms_settings.js
+│   │   └── pms_audit_log/           # Audit: Tamper-proof Room Status & Charge Alteration Log
+│   │       ├── pms_audit_log.json
+│   │       └── pms_audit_log.py
+│   ├── report/
+│   │   └── pms_summary/             # RevPAR, ADR & Occupancy Percentage Analytics Report
+│   │       ├── pms_summary.json
+│   │       ├── pms_summary.py
+│   │       └── pms_summary.js
+│   └── workspace/
+│       └── pms_workspace/           # Front Desk Reception Dashboard & Shortcuts
+│           └── pms_workspace.json
+├── controllers/                     # Folio state machines & room status transitions
+├── services/                        # OTA webhook listeners & keycard encoders
+├── tasks.py                         # Automated daily night audit scheduled jobs
+└── api.py                           # Whitelisted REST endpoints for booking engine sync
 ```
-frappe-hotel-pms/
-├── pms/
-│   ├── __init__.py           # Package version & module exports
-│   └── engine.py           # Production domain engine & data models
-├── tests/
-│   ├── __init__.py
-│   └── test_suite.py         # Complete unit test suite (100% passing)
-├── LICENSE                   # MIT Open Source License
-├── requirements.txt          # Python dependencies
-└── README.md                 # Complete documentation
-```
 
 ---
 
-## 🔌 Data Schema & Frappe DocType Integration
+## 🛠️ Installation & Bench Setup
 
-This package registers and interfaces with the following core architectural schemas:
-- **`FRAPPE Hotel Pms Settings` (Single):** Global environment flags, tolerance thresholds, API keys, and notification routing webhooks.
-- **`FRAPPE Hotel Pms Transaction Log`:** Immutable transaction records, raw payload dumps, processing timestamps, and execution state.
-- **`FRAPPE Hotel Pms Audit Register`:** Reconciliation status, statutory reference IDs, discrepancy flags, and approval signatures.
-
----
-
-## 🚀 Installation & Frappe Bench Setup
-
-### 1. Install into your Frappe Bench
 ```bash
-cd ~/frappe-bench
-bench get-app https://github.com/shyampandey1104/frappe-hotel-pms.git
-bench --site [your-site-name] install-app frappe_hotel_pms
-```
+# 1. Fetch app into Frappe Bench
+bench get-app https://github.com/shyampandey1104/frappe-hotel-pms
 
-### 2. Configure Event Triggers (`hooks.py`)
-```python
-# Event listeners mapped to system document lifecycles
-doc_events = {
-    "Core Document": {
-        "on_submit": "pms.engine.on_document_submit",
-        "on_cancel": "pms.engine.on_document_cancel"
-    }
-}
-```
+# 2. Install on your hospitality site
+bench --site hotel.yourdomain.com install-app pms
 
----
+# 3. Run database migrations
+bench --site hotel.yourdomain.com migrate
 
-## 💻 Production Usage & Code Example
-
-```python
-"""Unit tests for HotelPMSEngine."""
-
-from pms.engine import HotelPMSEngine, Room, Reservation, FolioCharge
-
-
-rooms = [
-Room(room_number="101", room_type="Deluxe", base_rate=3000.0),
-Room(room_number="102", room_type="Suite", base_rate=6000.0),
-]
-pms = HotelPMSEngine(rooms)
-
-res = Reservation(
-booking_id="BK-991",
-guest_name="Shyam Pandey",
-phone="9876543210",
-room_number="101",
-check_in_date="2026-11-10",
-check_out_date="2026-11-12",  # 2 nights
-)
-pms.reservations["BK-991"] = res
-
-# Check In
-assert pms.check_in_guest("BK-991") is True
-assert pms.rooms["101"].status == "Occupied"
-
-# Add Room Service Folio Charge
-pms.add_charge_to_folio("BK-991", FolioCharge(charge_type="Restaurant", amount=850.0, tax_rate=5.0, date="2026-11-11"))
-```
-
----
-
-## 🧪 Testing & Quality Assurance
-
-Run the automated test suite with zero external pip dependencies using standard Python:
-```bash
+# 4. Execute unit test suite
 python3 -m unittest discover tests
 ```
 
-Expected Output:
-```
-----------------------------------------------------------------------
-Ran test suite in 0.002s
-
-OK (100% tests passing)
-```
-
 ---
 
-## 🛡️ Enterprise Security, Governance & Compliance
-
-- **Role-Based Access Control (RBAC):** Strict permissions partitioned by operational role (Operator, Auditor, Finance Director, System Manager).
-- **Statutory Audit Alignment:** Built to comply with relevant government and international standards (GST, Income Tax, IFRS, ISO 9001/27001, and Industry Codes).
-- **Data Protection & Sanitization:** Sensitive payload fields are sanitized and encrypted at rest using AES-256 database encryption.
-
----
-
-## 👨‍💻 Senior Engineering & Commercial Support
-
-Architected, developed, and maintained by **Shyamkumar Pandey**.  
-For enterprise ERPNext implementations, custom Frappe app development, and technical consulting:
-- **GitHub:** [@shyampandey1104](https://github.com/shyampandey1104)
-- **Email:** [shyampandey1104@gmail.com](mailto:shyampandey1104@gmail.com)
+## 📄 License
+Released under the [MIT License](LICENSE). Architected for independent hotels, luxury resorts, and multi-property hospitality groups.
